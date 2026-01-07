@@ -1,7 +1,7 @@
-import { SynapseRush } from '@/components/game/SynapseRush';
+import { SynapseApply } from "@/components/game/SynapseApply";
 
 const Index = () => {
-  return <SynapseRush />;
+  return <SynapseApply />;
 };
 
 export default Index;
