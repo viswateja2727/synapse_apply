@@ -18,6 +18,16 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled;
 };
 
+// Get 4 options: correct answer + 3 random distractors
+const getOptionsForScenario = (correctConceptId: number): typeof CONCEPT_OPTIONS => {
+  const correctOption = CONCEPT_OPTIONS.find(c => c.id === correctConceptId)!;
+  const distractors = shuffleArray(
+    CONCEPT_OPTIONS.filter(c => c.id !== correctConceptId)
+  ).slice(0, APPLY_GAME_CONFIG.optionsPerQuestion - 1);
+  
+  return shuffleArray([correctOption, ...distractors]);
+};
+
 export const ApplyGameScreen = ({ onGameOver }: ApplyGameScreenProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -34,10 +44,11 @@ export const ApplyGameScreen = ({ onGameOver }: ApplyGameScreenProps) => {
 
   const currentScenario: ScenarioItem | undefined = gameScenarios[currentIndex];
 
-  // Shuffle concept options for each question
-  const shuffledOptions = useMemo(() => {
-    return shuffleArray(CONCEPT_OPTIONS);
-  }, [currentIndex]);
+  // Get 4 options for current question (correct + 3 distractors)
+  const questionOptions = useMemo(() => {
+    if (!currentScenario) return [];
+    return getOptionsForScenario(currentScenario.correctConceptId);
+  }, [currentScenario]);
 
   const handleSelectAnswer = useCallback((conceptId: number) => {
     if (showFeedback) return;
@@ -49,8 +60,7 @@ export const ApplyGameScreen = ({ onGameOver }: ApplyGameScreenProps) => {
 
     if (isCorrect) {
       soundManager.playCorrect();
-      const pointsEarned = APPLY_GAME_CONFIG.correctPoints + (hintUsed ? APPLY_GAME_CONFIG.hintPenalty : 0);
-      setScore(prev => prev + pointsEarned);
+      setScore(prev => prev + APPLY_GAME_CONFIG.correctPoints);
       setCorrectCount(prev => prev + 1);
     } else {
       soundManager.playWrong();
@@ -61,7 +71,7 @@ export const ApplyGameScreen = ({ onGameOver }: ApplyGameScreenProps) => {
     setTimeout(() => {
       if (currentIndex + 1 >= gameScenarios.length) {
         const finalScore = isCorrect 
-          ? score + APPLY_GAME_CONFIG.correctPoints + (hintUsed ? APPLY_GAME_CONFIG.hintPenalty : 0)
+          ? score + APPLY_GAME_CONFIG.correctPoints
           : Math.max(0, score + APPLY_GAME_CONFIG.wrongPenalty);
         const finalCorrect = isCorrect ? correctCount + 1 : correctCount;
         onGameOver(finalScore, finalCorrect, gameScenarios.length);
@@ -73,12 +83,14 @@ export const ApplyGameScreen = ({ onGameOver }: ApplyGameScreenProps) => {
         setHintUsed(false);
       }
     }, 1500);
-  }, [showFeedback, currentScenario, hintUsed, currentIndex, gameScenarios.length, score, correctCount, onGameOver]);
+  }, [showFeedback, currentScenario, currentIndex, gameScenarios.length, score, correctCount, onGameOver]);
 
   const handleShowHint = useCallback(() => {
     if (!hintUsed) {
       setShowHint(true);
       setHintUsed(true);
+      // Immediately deduct hint penalty from score
+      setScore(prev => Math.max(0, prev - APPLY_GAME_CONFIG.hintPenalty));
     }
   }, [hintUsed]);
 
@@ -147,9 +159,9 @@ export const ApplyGameScreen = ({ onGameOver }: ApplyGameScreenProps) => {
           Which AI concept does this describe?
         </h2>
 
-        {/* Options Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 w-full">
-          {shuffledOptions.map((option, index) => {
+        {/* Options Grid - 4 options per question */}
+        <div className="grid grid-cols-2 gap-3 w-full max-w-2xl">
+          {questionOptions.map((option, index) => {
             const isSelected = selectedAnswer === option.id;
             const isCorrect = option.id === currentScenario.correctConceptId;
             const showAsCorrect = showFeedback && isCorrect;
