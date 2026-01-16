@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**:[Website](https://synapse-apply.vercel.app/)
+**URL**: [Synapse Apply](https://synapse-apply.vercel.app/)(click here to play)
 
 ## How can I edit this code?
 
