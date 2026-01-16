@@ -9,22 +9,23 @@ export interface ConceptOption {
   id: number;
   concept: string;
   emoji: string;
+  definition: string;
 }
 
 // Concepts that teens will match scenarios to
 export const CONCEPT_OPTIONS: ConceptOption[] = [
-  { id: 1, concept: "Token", emoji: "🧩" },
-  { id: 2, concept: "LLM", emoji: "🤖" },
-  { id: 3, concept: "Context", emoji: "🧠" },
-  { id: 4, concept: "Prompt", emoji: "💬" },
-  { id: 5, concept: "Embedding", emoji: "🔢" },
-  { id: 6, concept: "Training", emoji: "📚" },
-  { id: 7, concept: "Transformer Layers", emoji: "🏗️" },
-  { id: 8, concept: "Logits", emoji: "📊" },
-  { id: 9, concept: "Softmax", emoji: "📈" },
-  { id: 10, concept: "Prompting", emoji: "✨" },
-  { id: 11, concept: "Context Window", emoji: "📦" },
-  { id: 12, concept: "Hallucinations", emoji: "👻" },
+  { id: 1, concept: "Token", emoji: "🧩", definition: "A token is the smallest unit of text an AI processes — it could be a word, part of a word, or even punctuation." },
+  { id: 2, concept: "LLM", emoji: "🤖", definition: "A Large Language Model is an AI trained on massive text data to understand and generate human-like language." },
+  { id: 3, concept: "Context", emoji: "🧠", definition: "Context is the information from your conversation that helps the AI understand what you're talking about." },
+  { id: 4, concept: "Prompt", emoji: "💬", definition: "A prompt is the input or instruction you give to an AI to get a response." },
+  { id: 5, concept: "Embedding", emoji: "🔢", definition: "Embeddings convert words into numerical vectors so AI can understand meaning and find similarities." },
+  { id: 6, concept: "Training", emoji: "📚", definition: "Training is when an AI learns patterns from large datasets to improve its predictions." },
+  { id: 7, concept: "Transformer Layers", emoji: "🏗️", definition: "Transformer layers are processing blocks in AI that analyze relationships between words in text." },
+  { id: 8, concept: "Logits", emoji: "📊", definition: "Logits are raw output scores from an AI before they're converted into probabilities." },
+  { id: 9, concept: "Softmax", emoji: "📈", definition: "Softmax converts raw scores into probabilities that add up to 100%, helping AI choose the best answer." },
+  { id: 10, concept: "Prompting", emoji: "✨", definition: "Prompting is the skill of crafting effective instructions to get better responses from AI." },
+  { id: 11, concept: "Context Window", emoji: "📦", definition: "The context window is the maximum amount of text an AI can process at once." },
+  { id: 12, concept: "Hallucinations", emoji: "👻", definition: "Hallucinations are when AI confidently generates false or made-up information." },
 ];
 
 // Real-world scenarios for each concept (16 scenarios covering all concepts)
